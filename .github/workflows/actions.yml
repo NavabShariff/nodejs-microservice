@@ -12,7 +12,7 @@ permissions:
 
 env:
   AWS_DEFAULT_REGION: 'ap-south-1'
-  ECS_TASK_DEFINITION_FILE: deploy/ecs-task-definition.json
+  ECS_TASK_DEFINITION_FILE: ecs-task-definition.json
 
 jobs:
   build-deploy:
@@ -55,14 +55,18 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-    - name: Render ECS task definition
-      id: render-task-definition
+    - name: Download task definition 
+      run: |
+        aws ecs describe-task-definition - task-definition nodejs-microservice - query taskDefinition > task-definition.json
+
+    - name: Fill in new image ID in task definition
+      id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition-file: ${{ env.ECS_TASK_DEFINITION_FILE }}
+        task-definition: task-definition.json 
         container-name: microservice-container
         image: ${{ steps.build-image.outputs.image }}
-
+        
     # - name: Deploy task definition to ECS service
     #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
     #   with:
