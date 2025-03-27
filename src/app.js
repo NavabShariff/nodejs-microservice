@@ -7,6 +7,12 @@ app.get('/', (req, res) => {
     res.send('Hello from Microservice!');
 });
 
-app.listen(PORT, () => {
+// Health Check Route for ALB
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'UP' });
+});
+
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Microservice running on port ${PORT}`);
 });
+d
