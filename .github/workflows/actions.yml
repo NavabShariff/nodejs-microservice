@@ -48,7 +48,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: cloudzenia
-        IMAGE_TAG: user-dashboard-${{ env.commit_sha }}
+        IMAGE_TAG: nodejs-microservice-${{ env.commit_sha }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
