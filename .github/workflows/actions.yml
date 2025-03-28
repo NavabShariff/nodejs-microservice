@@ -1,4 +1,4 @@
-name: Build and Deploy to AWS App runner
+name: Build and Deploy to AWS ECS
 
 on:
   push:
