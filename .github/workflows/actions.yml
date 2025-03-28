@@ -12,7 +12,8 @@ permissions:
 
 env:
   AWS_DEFAULT_REGION: 'ap-south-1'
-  ECS_TASK_DEFINITION_FILE: ecs-task-definition.json
+  ECS_CLUSTER_NAME: 'cloudzenia'
+  ECS_SERVICE_NAME: 'nodejs-microservice'
 
 jobs:
   build-deploy:
@@ -71,12 +72,5 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1 
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: nodejs-microservice
-        cluster: cloudzenia
-    # - name: Deploy task definition to ECS service
-    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-    #   with:
-    #     service: ${{ env.ECS_SERVICE_NAME }}
-    #     cluster: ${{ env.ECS_CLUSTER_NAME }}
-    #     task-definition: ${{ steps.render-task-definition.outputs.task-definition }}
-    #     wait-for-service-stability: true
+        service: ${{ env.ECS_SERVICE_NAME }}
+        cluster: ${{ env.ECS_CLUSTER_NAME }}
